@@ -31,9 +31,9 @@ SIZEOF_Blitter          rs.w                    0
 
 ;
 DoBlitAndWait           macro
-                        bset.w                  #15,BlitterMiscReg1.w
+                        bset                    #7,BlitterMiscReg1.w
                         nop
-.waitFinish\@           bset.w                  #15,BlitterMiscReg1.w
+.waitFinish\@           bset                    #7,BlitterMiscReg1.w
                         nop
                         bne.s                   .waitFinish\@
                         endm

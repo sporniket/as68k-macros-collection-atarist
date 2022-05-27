@@ -32,7 +32,7 @@ SaveSysPalette          macro
 .nextEntry\@            _Setcolor               d5,#-1
                         move.w                  d0,(a4)+
                         addq.w                  #1,d5
-                        dbf.s                   d4,.nextEntry\@
+                        dbf                     d4,.nextEntry\@
                         endm
 
 RestoreSavedPalette     macro
