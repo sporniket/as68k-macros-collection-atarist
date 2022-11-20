@@ -7,7 +7,7 @@
 ; ================================================================================================================
 ; File io macros
 ;
-_fcreate                macro
+_dos_fcreate                macro
                         ; 1 - filename
                         ; 2 - file attribute (e.g. #0 : regular)
                         move.w                  \2,-(sp)
@@ -15,7 +15,7 @@ _fcreate                macro
                         ___gemdos               60,8
                         endm
 ;
-_fopen                  macro
+_dos_fopen                  macro
                         ; 1 - filename
                         ; 2 - mode (e.g. #4 : read-write)
                         move.w                  \2,-(sp)
@@ -23,7 +23,7 @@ _fopen                  macro
                         ___gemdos               61,8
                         endm
 ;
-_fwrite                 macro
+_dos_fwrite                 macro
                         ; 1 - handle
                         ; 2 - buffer size
                         ; 3 - buffer address
@@ -33,7 +33,7 @@ _fwrite                 macro
                         ___gemdos               64,12
                         endm
 ;
-_fclose                 macro
+_dos_fclose                 macro
                         ; 1 - handle
                         move.w                  \1,-(sp)
                         ___gemdos               62,4

@@ -6,34 +6,39 @@
 ; REQUIRES systraps.s
 ; ================================================================================================================
 ; Input macros
-_ikbdws                 macro
+_xos_ikbdws                 macro
                         ;1 - corrected byte count (= byte count - 1)
                         ;2 - address of the bytes
                         pea                     \2
                         move.w                  #\1,-(sp)
                         ___xbios                25,8
                         endm
-_Kbdvbase               macro
+_xos_Kbdvbase               macro
                         ___xbios                34,2
                         endm
-_Cconis                 macro
+_dos_Cconis                 macro
                         ___gemdos               11,2
                         endm
 ;
-_Cconin                 macro
+_dos_Cconin                 macro
                         ; Read a character from the standard input device.
                         ___gemdos               1,2
                         endm
 
 IsWaitingKey            macro
                         ; The CCR will be setup for beq.s
-                        _Cconis
+                        _dos_Cconis
                         tst.l                   d0
                         endm
 
-WaitInp                 macro
+_dos_Crawcin            macro
                         ___gemdos               7,2
                         endm
+
+WaitInp                 macro
+                        _dos_Crawcin
+                        endm
+
 
 FlushInp                macro
                         ; read and discards any char from input.
@@ -42,7 +47,7 @@ FlushInp                macro
 .hasInput\@
                         IsWaitingKey
                         beq                     .thatsAll\@
-                        _Cconin
+                        _dos_Cconin
                         bra                     .hasInput\@
 .thatsAll\@
                         endm
@@ -51,7 +56,7 @@ SaveSysIkbdHandler      macro
                         ;1 - storage address of the structure
                         ;2 - storage address for the default handler for joystick
                         ;3 - adresse registry to use (side effect)
-                        _Kbdvbase
+                        _xos_Kbdvbase
                         move.l                  d0,\1
                         move.l                  d0,\3
                         move.l                  24(\3),\2

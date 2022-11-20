@@ -6,7 +6,7 @@
 ; REQUIRES systraps.s
 ; ================================================================================================================
 ; Special execute calls
-_Supexec                macro
+_xos_Supexec                macro
                         ; 1 - address of the subroutine to execute in supervisor mode
                         move.l                  \1,-(sp)
                         ___xbios                38,6

@@ -39,7 +39,7 @@ DoBlitAndWait           macro
                         endm
 
 ;
-_BlitMode               macro
+_xos_BlitMode               macro
                         move.w                  \1,-(sp)
                         ___xbios                64,4
                         endm

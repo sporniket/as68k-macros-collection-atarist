@@ -6,23 +6,23 @@
 ; REQUIRES systraps.s
 ; ================================================================================================================
 ; Screen macros
-_Physbase               macro
+_xos_Physbase               macro
                         ___xbios                2,2
                         endm
 
-_Logbase                macro
+_xos_Logbase                macro
                         ___xbios                3,2
                         endm
 
-_Getrez                 macro
+_xos_Getrez                 macro
                         ___xbios                4,2
                         endm
 
-_Vsync                  macro
+_xos_Vsync                  macro
                         ___xbios                37,2
                         endm
 
-_Setscreen              macro
+_xos_Setscreen              macro
                         ; 1 - logical screen effective address, -1 to left unchanged
                         ; 2 - physical screen effective address, -1 to left unchanged
                         ; 3 - screen resolution, 0 => low res, 1 => med res, 2 => high res, -1 => unchanged
@@ -35,5 +35,5 @@ _Setscreen              macro
 ChangeToRez             macro
                         ; Meaningful for color ST screen only
                         ; 1 - screen resolution, 0 => low res, 1 => med res, -1 => unchanged
-                        _Setscreen              -1,-1,\1
+                        _xos_Setscreen              -1,-1,\1
                         endm

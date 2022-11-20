@@ -7,19 +7,19 @@
 ; ================================================================================================================
 ; memory management, including the MShrink of the TPA (MUST be the first macro called then.)
 ; ================================================================================================================
-_Malloc                 macro
+_dos_Malloc                 macro
                         ; 1 - the number of byte to allocate or -1 to get the size of free memory
                         move.l                  \1,-(sp)
                         ___gemdos               72,6
                         endm
 
-_Mfree                  macro
+_dos_Mfree                  macro
                         ; 1 - adress of the block to free, previously allocated
                         move.l                  \1,-(sp)
                         ___gemdos               73,6
                         endm
 
-_Mshrink                macro
+_dos_Mshrink                macro
                         ; 1 - address of the block to shrink
                         ; 2 - new size
                         move.l                  \2,-(sp)
@@ -82,7 +82,7 @@ stackIsGood\@           ; -- d5 += stack size
 heapIsGood\@            ; -- d5 += heap size
                         add.l                   d3,d5
 
-                        _Mshrink                (a0),d5
+                        _dos_Mshrink                (a0),d5
                         tst.l                   d0
                         bne.s                   thatsNotOk\@
                         ; -- OK, setup side effects

@@ -6,13 +6,13 @@
 ; REQUIRES systraps.s
 ; ================================================================================================================
 ; Palettes macros
-_Setpalette             macro
+_xos_Setpalette             macro
                         ; 1 - Pointer to palette adresse
                         pea                     \1
                         ___xbios                6,6
                         endm
 
-_Setcolor               macro
+_xos_Setcolor               macro
                         ; 1 - Colour index (0~15)
                         ; 2 - Colour value $0rgb with ste color coding, #-1 to left unchanged
                         move.w                  \2,-(sp)
@@ -29,7 +29,7 @@ SaveSysPalette          macro
                         moveq                   #0,d5
                         move.w                  #15,d4                  ; loop through all the 16 colors
                         lea                     \1,a4
-.nextEntry\@            _Setcolor               d5,#-1
+.nextEntry\@            _xos_Setcolor               d5,#-1
                         move.w                  d0,(a4)+
                         addq.w                  #1,d5
                         dbf                     d4,.nextEntry\@
@@ -37,5 +37,5 @@ SaveSysPalette          macro
 
 RestoreSavedPalette     macro
                         ; 1 - buffer containing the previously saved palette
-                        _Setpalette             \1
+                        _xos_Setpalette             \1
                         endm
