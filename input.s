@@ -75,9 +75,28 @@ SIZEOF_KBDVBASE         rs.b 1 ; WITH EVEN FIX PADDING
 EVENSIZEOF_KBDVBASE     rs.b 0 ; 
 
 ; ================================================================================================================
+; Just copy kbdvbase to another place, for loading into address register, put to or retrieve from an internal 
+; cache,...
+;
+KBDVBASE_copy           macro
+                        ;1 - address registry having KBDVBASE
+                        ;2 - storage address for caching KBDVBASE
+                        move.l                  \1,\2
+                        endm
+
+; ================================================================================================================
+; Load kbdvbase into address register
+;
+KBDVBASE_fetchInto      macro
+                        ;1 - address registry to put KBDVBASE into
+                        _xos_Kbdvbase
+                        KBDVBASE_copy           d0,\1
+                        endm
+
+; ================================================================================================================
 ; Wait for idle state
 ;
-WaitForIdleIkbdHandlers macro
+KBDVBASE_waitWhileBusy  macro
                         ;1 - address registry having KBDVBASE
 .waitIkbd\@             tst.b                   KBDVBASE_drvstat(\1)
                         bne.s                   .waitIkbd\@
@@ -86,27 +105,21 @@ WaitForIdleIkbdHandlers macro
 ; ================================================================================================================
 ; Save individual handler
 ;
-SaveSysIkbdHandler      macro
-                        ;1 - storage address of the structure
-                        ;2 - storage address for the default handler for joystick
-                        ;3 - adresse registry to use (side effect)
-                        ;4 - offset of handler to save in KBDVBASE
-                        _xos_Kbdvbase
-                        move.l                  d0,\1
-                        move.l                  d0,\3
-                        move.l                  \4(\3),\2
+KBDVBASE_backupHandler  macro
+                        ;1 - address registry having KBDVBASE
+                        ;2 - offset in KBDVBASE of the handler to save
+                        ;3 - storage address of the backup
+                        move.l                  \2(\1),\3
                         endm
 
 ; ================================================================================================================
-; Restore individual handler
+; Change individual handler
 ;
-RestoreSysIkbdHandler   macro
-                        ;1 - storage address of the structure
-                        ;2 - storage address for the default handler for joystick
-                        ;3 - adresse registry to use (side effect)
-                        ;4 - offset of handler to save in KBDVBASE
-                        move.l                  \1,\3
-                        move.l                  \2,\4(\3)
+KBDVBASE_setHandler     macro
+                        ;1 - address registry having KBDVBASE
+                        ;2 - offset in KBDVBASE of the handler to change
+                        ;3 - storage address of the handler
+                        move.l                  \3,\2(\1)
                         endm
 
 ; ================================================================================================================
