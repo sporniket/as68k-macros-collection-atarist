@@ -10,7 +10,7 @@ _xos_ikbdws                 macro
                         ;1 - corrected byte count (= byte count - 1)
                         ;2 - address of the bytes
                         pea                     \2
-                        move.w                  #\1,-(sp)
+                        move.w                  \1,-(sp)
                         ___xbios                25,8
                         endm
 _xos_Kbdvbase               macro
