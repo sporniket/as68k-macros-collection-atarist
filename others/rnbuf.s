@@ -7,6 +7,20 @@
 ; ================================================================================================================
 ; Ring buffer of 4 bytes long items
 ; ---
+; Typical use -- before ever working with a buffer
+; The given structure is filled with RingBuffer_adrEnd being the size in bytes of the storage area. After the
+; initialization is done, the descriptor contains working values
+;
+;                           rnbuf_withRingBuffer    a4,#my_ring_buffer
+;                           rnbuf_init              a4,#my_ring_buffer_storage
+;                           ; ...
+;                           ; ... etc.
+;                           ; ...
+; my_ring_buffer            dc.l                    0,32,0,0 ; will work with a 32-bytes long storage area
+; my_ring_buffer_storage    ds.b                    32,0
+;                           even
+;
+; ---
 ; Typical use -- feeding the buffer, given that a2 points to the source data, and using an item size of 3 bytes,
 ; working using a4 and a3
 ;
@@ -57,8 +71,23 @@ EVENSIZEOF_RingBuffer   rs.b 0 ;
 ; Use given address register as pointer to a RingBuffer
 rnbuf_withRingBuffer    macro
                         ; 1 - <<this>>, address registry to use, will point to the RingBuffer
-                        ; the pointer to the Ring Buffer to use.
+                        ; 2 - the pointer to the Ring Buffer to use.
                         move.l \2,\1
+                        endm
+
+; ================================================================================================================
+; Init this descriptor with the storage address
+; This.adrEnd contains the size of the storage buffer.
+rnbuf_init              macro
+                        ; 1 - <<this>>, address registry to use, will point to the RingBuffer
+                        ; 2 - the address registry used to work
+                        ; 3 - the actual address of the storage area
+                        move.l      \3,\2
+                        move.l      \2,RingBuffer_adrStart(\1)
+                        move.l      \2,RingBuffer_adrPush(\1)
+                        move.l      \2,RingBuffer_adrPop(\1)
+                        add.l       RingBuffer_adrEnd(\1),\2
+                        move.l      \2,RingBuffer_adrEnd(\1)
                         endm
 
 ; ================================================================================================================
