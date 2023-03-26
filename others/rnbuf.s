@@ -5,7 +5,7 @@
 ; ================================================================================================================
 ; REQUIRES ...
 ; ================================================================================================================
-; Ring buffer of 4 bytes long items
+; Ring buffer of arbitrary bytes long items
 ; ---
 ; Typical use -- before ever working with a buffer
 ; The given structure is filled with RingBuffer_adrEnd being the size in bytes of the storage area. After the
